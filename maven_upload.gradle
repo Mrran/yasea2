@@ -1,0 +1,27 @@
+apply plugin: 'maven'
+
+def REPOSITORY_URL = "https://devops-maven.zeekrlife.com/repository/zeekr-research/"
+def NEXUS_USERNAME = "deployment"
+def NEXUS_PASSWORD = "dev!@#\$23432"
+logger.info("groupId = %s\t\nartifactId = %s\t\nversion = %s\t\nrepository = %s\t\n", GROUP, POM_ARTIFACT_ID, VERSION_NAME, REPOSITORY_URL)
+afterEvaluate { project ->
+    uploadArchives {
+        repositories.mavenDeployer {
+            pom.groupId = GROUP
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.version = VERSION_NAME
+            repository(url: REPOSITORY_URL) {
+                authentication(userName: NEXUS_USERNAME, password: NEXUS_PASSWORD)
+            }
+        }
+    }
+    // 用于打包源代码的任务
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        //from android.sourceSets.main.java.sourceFiles //仅Java源码
+        from android.sourceSets.main.java.srcDirs //包括Java和Kotlin源码
+    }
+    artifacts {
+        archives androidSourcesJar //打包源码，去除这行打的包将看不到源码
+    }
+}
