@@ -1,8 +1,5 @@
 apply plugin: 'maven'
 
-def REPOSITORY_URL = "https://devops-maven.zeekrlife.com/repository/zeekr-research/"
-def NEXUS_USERNAME = "deployment"
-def NEXUS_PASSWORD = "dev!@#\$23432"
 logger.info("groupId = %s\t\nartifactId = %s\t\nversion = %s\t\nrepository = %s\t\n", GROUP, POM_ARTIFACT_ID, VERSION_NAME, REPOSITORY_URL)
 afterEvaluate { project ->
     uploadArchives {
